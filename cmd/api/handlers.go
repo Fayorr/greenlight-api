@@ -1,5 +1,19 @@
 package main
 
-// func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Request) {
-// 	w.Write([]byte("Hello World"))
-// }
+import (
+	"fmt"
+	"net/http"
+)
+
+func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request) {
+	id, err := app.readIDParam(r)
+if err != nil {
+http.NotFound(w, r)
+return
+}
+fmt.Fprintf(w, "show the details of movie %d\n", id)
+}
+
+func (app *application) createMovieHandler(w http.ResponseWriter, r *http.Request) {
+fmt.Fprintln(w, "create a new movie")
+}
