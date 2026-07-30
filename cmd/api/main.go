@@ -11,15 +11,16 @@ import (
 
 const version = "1.0.0"
 
-type config struct{
-		port int
-		env string
+type config struct {
+	port int
+	env  string
 }
 
 type application struct {
 	config config
 	logger *slog.Logger
 }
+
 func main() {
 	var cfg config
 
@@ -28,7 +29,7 @@ func main() {
 	flag.Parse()
 
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-		Level: slog.LevelDebug,
+		Level:     slog.LevelDebug,
 		AddSource: false,
 	}))
 
@@ -39,18 +40,17 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/v1/healthcheck", app.healthcheckHandler)
-	
+
 	srv := &http.Server{
-		Addr: fmt.Sprintf(":%d", cfg.port),
-		Handler: app.routes(),
-		ReadTimeout: 5 * time.Second,
+		Addr:         fmt.Sprintf(":%d", cfg.port),
+		Handler:      app.routes(),
+		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
-		IdleTimeout: time.Minute,
-		ErrorLog: slog.NewLogLogger(logger.Handler(), slog.LevelError),
+		IdleTimeout:  time.Minute,
+		ErrorLog:     slog.NewLogLogger(logger.Handler(), slog.LevelError),
 	}
 
 	logger.Info("starting server", "addr", srv.Addr, "env", cfg.env)
-
 
 	err := srv.ListenAndServe()
 	logger.Error(err.Error())
