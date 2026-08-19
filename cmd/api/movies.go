@@ -50,5 +50,5 @@ func (app *application) createMovieHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	fmt.Fprintf(w, "%+v\n", input)
+	fmt.Fprintf(w, "%+v\n ", input)
 }
